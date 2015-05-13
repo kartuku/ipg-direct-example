@@ -263,7 +263,7 @@ public class RequestBuilder {
                     } catch (NullPointerException e) {}
                     System.out.print(String.format("%s [%s] : ", name, defaultInput));
                     String input = reader.readLine();
-                    Method setMethod = req.getClass().getMethod("set" + name, String.class);
+                    Method setMethod = req.getClass().getMethod("set" + name, Boolean.class);
                     setMethod.invoke(req, new Object[]{Boolean.parseBoolean(input.toLowerCase())});
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException | NoSuchMethodException | SecurityException ex) {
                     Logger.getLogger(RequestBuilder.class.getName()).log(Level.SEVERE, null, ex);
