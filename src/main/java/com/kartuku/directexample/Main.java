@@ -353,8 +353,8 @@ public class Main {
             OttResponse res = directAPI.ott(req);
             System.out.println("Response : ");
             showParameter(res);
-            if (res.getUrl().trim().length() > 0) {
-                System.out.println(String.format("3DS is active and need authentication.\n%s\n Open in browser? [yes]", res.getUrl()));
+            if (res.getUrl() != null && res.getUrl().trim().length() > 0) {
+                System.out.println(String.format("3DS is active and need authentication.\n%s\nOpen in browser? [yes]", res.getUrl()));
                 String input = reader.readLine();
                 if ((input.equalsIgnoreCase("yes") || input.trim().length() <= 0) && Desktop.isDesktopSupported()) {
                     try {
