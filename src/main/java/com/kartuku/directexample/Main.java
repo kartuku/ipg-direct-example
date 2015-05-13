@@ -9,6 +9,7 @@ import com.kartuku.directclient.DirectAPI;
 import com.kartuku.directclient.model.request.*;
 import com.kartuku.directclient.config.SimpleConfig;
 import com.kartuku.directclient.exception.IpgDirectAPIException;
+import com.kartuku.directclient.exception.NoSignatureException;
 import com.kartuku.directclient.model.Message;
 import com.kartuku.directclient.model.response.AuthorizeResponse;
 import com.kartuku.directclient.model.response.CaptureResponse;
@@ -20,6 +21,7 @@ import com.kartuku.directclient.model.response.TokenListResponse;
 import com.kartuku.directclient.model.response.TokenRemoveResponse;
 import com.kartuku.directclient.model.response.TokenStoreResponse;
 import com.kartuku.directclient.model.response.VoidAuthorizeResponse;
+import com.kartuku.directclient.model.response.VoidCaptureResponse;
 import com.kartuku.directclient.model.response.VoidPurchaseResponse;
 import com.kartuku.directclient.model.response.VoidRefundResponse;
 import java.awt.Desktop;
@@ -47,8 +49,8 @@ public class Main {
         config.setMerchantToken("merchantToken");
 
         if (args.length == 2) {
-            config.setMerchantToken(args[1]);
-            config.setMerchantSecretToken(args[0]);
+            config.setMerchantToken(args[0]);
+            config.setMerchantSecretToken(args[1]);
         }
 
         DirectAPI directAPI = new DirectAPI();
@@ -164,6 +166,10 @@ public class Main {
             AuthorizeResponse res = directAPI.authorize(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message, NoSignatureException must be caught first
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -177,6 +183,10 @@ public class Main {
             CaptureResponse res = directAPI.capture(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -190,6 +200,10 @@ public class Main {
             VoidPurchaseResponse res = directAPI.voidPurchase(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -203,6 +217,10 @@ public class Main {
             RefundResponse res = directAPI.refund(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,19 +234,27 @@ public class Main {
             VoidAuthorizeResponse res = directAPI.voidAuthorize(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private static void voidCapture(DirectAPI directAPI, BufferedReader reader) {
-        VoidAuthorizeRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidAuthorizeRequest(reader);
+        VoidCaptureRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidCaptureRequest(reader);
         try {
             System.out.println("Request voidCapture with parameter : ");
             showParameter(req);
-            VoidAuthorizeResponse res = directAPI.voidAuthorize(req);
+            VoidCaptureResponse res = directAPI.voidCapture(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -242,6 +268,10 @@ public class Main {
             VoidRefundResponse res = directAPI.voidRefund(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -255,6 +285,10 @@ public class Main {
             TokenStoreResponse res = directAPI.tokenStore(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -268,6 +302,10 @@ public class Main {
             QueryResponse res = directAPI.query(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -281,6 +319,10 @@ public class Main {
             TokenRemoveResponse res = directAPI.tokenRemove(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -294,6 +336,10 @@ public class Main {
             TokenListResponse res = directAPI.tokenList(req);
             System.out.println("Response : ");
             showParameter(res);
+        } catch (NoSignatureException ex) {
+            // NoSignatureException is exception where the result from the IPG server without message digest
+            // the message itself is an error message
+            System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
         } catch (IpgDirectAPIException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

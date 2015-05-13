@@ -65,8 +65,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -87,8 +87,8 @@ public class RequestBuilder {
         req.setTxnStoreCode(defaultStoreCode);
         req.setTxnTradingDate(CommonUtil.convertDate(txDate));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -109,8 +109,8 @@ public class RequestBuilder {
         req.setTxnStoreCode(defaultStoreCode);
         req.setTxnTradingDate(CommonUtil.convertDate(txDate));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -123,8 +123,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -138,8 +138,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -150,8 +150,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -162,8 +162,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -174,8 +174,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -186,8 +186,8 @@ public class RequestBuilder {
         Date txDate = new Date();
         req.setTxnReference(Long.toString(txDate.getTime()));
 
-        showInputRequest(req, reader);
-        
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -195,9 +195,9 @@ public class RequestBuilder {
         QueryRequest req = new QueryRequest();
 
         req.setMerchantToken(config.getMerchantToken());
-        
-        showInputRequest(req, reader);
-        
+
+        showInputFormRequest(req, reader);
+
         return req;
     }
 
@@ -207,7 +207,7 @@ public class RequestBuilder {
         req.setMerchantToken(config.getMerchantToken());
         req.setMerchantUserCode(defaultMerchantUserCode);
 
-        showInputRequest(req, reader);
+        showInputFormRequest(req, reader);
 
         return req;
     }
@@ -218,7 +218,7 @@ public class RequestBuilder {
         req.setMerchantToken(config.getMerchantToken());
         req.setMerchantUserCode(defaultMerchantUserCode);
 
-        showInputRequest(req, reader);
+        showInputFormRequest(req, reader);
 
         return req;
     }
@@ -229,13 +229,13 @@ public class RequestBuilder {
         req.setMerchantToken(config.getMerchantToken());
         req.setMerchantUserCode(defaultMerchantUserCode);
 
-        showInputRequest(req, reader);
+        showInputFormRequest(req, reader);
 
         return req;
     }
 
-    private <T extends Request> void showInputRequest(T req, BufferedReader reader) {
-        // it's not good to use reflection for a form, it's just an example
+    private <T extends Request> void showInputFormRequest(T req, BufferedReader reader) {
+        // it's not good to use reflection for a form input, it's just an example
         Method[] methods = req.getClass().getMethods();
         for (Method method : methods) {
             String name = method.getName();
@@ -251,6 +251,20 @@ public class RequestBuilder {
                     String input = reader.readLine();
                     Method setMethod = req.getClass().getMethod("set" + name, String.class);
                     setMethod.invoke(req, new Object[]{useDefault(input, defaultInput)});
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException | NoSuchMethodException | SecurityException ex) {
+                    Logger.getLogger(RequestBuilder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (name.startsWith("is")) {
+                try {
+                    name = name.replace("is", "");
+                    boolean defaultInput = false;
+                    try {
+                        defaultInput = Boolean.parseBoolean(method.invoke(req, new Object[]{}).toString());
+                    } catch (NullPointerException e) {}
+                    System.out.print(String.format("%s [%s] : ", name, defaultInput));
+                    String input = reader.readLine();
+                    Method setMethod = req.getClass().getMethod("set" + name, String.class);
+                    setMethod.invoke(req, new Object[]{Boolean.parseBoolean(input.toLowerCase())});
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException | NoSuchMethodException | SecurityException ex) {
                     Logger.getLogger(RequestBuilder.class.getName()).log(Level.SEVERE, null, ex);
                 }
