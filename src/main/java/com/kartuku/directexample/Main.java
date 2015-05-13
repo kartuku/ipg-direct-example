@@ -57,7 +57,7 @@ public class Main {
         // set config
         directAPI.setConfig(config);
         // set time out connection in ms
-        directAPI.setConnectionTimeout(5000);
+        directAPI.setConnectionTimeout(10000);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input;
@@ -374,10 +374,21 @@ public class Main {
         for (Method method : methods) {
             String name = method.getName();
             if (name.startsWith("get") && !name.equals("getClass")) {
-                name = name.replace("get", "");
+                name = name.replaceFirst("get", "");
                 String value = "";
                 try {
                     value = method.invoke(message, new Object[]{}).toString();
+                } catch (NullPointerException ex) {
+                    //  Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    //  Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println(String.format("%s : %s", name, value));
+            }else if(name.startsWith("is")){
+                name = name.replaceFirst("is", "");
+                boolean value = false;
+                try {
+                    value = Boolean.parseBoolean(method.invoke(message, new Object[]{}).toString());
                 } catch (NullPointerException ex) {
                     //  Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

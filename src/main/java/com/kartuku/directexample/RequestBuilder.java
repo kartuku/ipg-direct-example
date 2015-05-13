@@ -241,7 +241,7 @@ public class RequestBuilder {
             String name = method.getName();
             if (name.startsWith("get") && !name.equals("getClass")) {
                 try {
-                    name = name.replace("get", "");
+                    name = name.replaceFirst("get", "");
                     String defaultInput = "";
                     try {
                         defaultInput = method.invoke(req, new Object[]{}).toString();
@@ -256,7 +256,7 @@ public class RequestBuilder {
                 }
             } else if (name.startsWith("is")) {
                 try {
-                    name = name.replace("is", "");
+                    name = name.replaceFirst("is", "");
                     boolean defaultInput = false;
                     try {
                         defaultInput = Boolean.parseBoolean(method.invoke(req, new Object[]{}).toString());
