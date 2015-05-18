@@ -5,10 +5,10 @@
  */
 package com.kartuku.directexample;
 
-import com.kartuku.directclient.DirectAPI;
+import com.kartuku.directclient.KartukuDirect;
 import com.kartuku.directclient.model.request.*;
 import com.kartuku.directclient.config.SimpleConfig;
-import com.kartuku.directclient.exception.IpgDirectAPIException;
+import com.kartuku.directclient.exception.KartukuDirectException;
 import com.kartuku.directclient.exception.NoSignatureException;
 import com.kartuku.directclient.model.Message;
 import com.kartuku.directclient.model.response.AuthorizeResponse;
@@ -45,15 +45,15 @@ public class Main {
         // create config file for hold merchant token and merchant secret token
         // you can create any class to save and hold merchant token and merchant secret key based on your client based on Config interface
         SimpleConfig config = new SimpleConfig();
-        config.setMerchantSecretToken("merchantSecretToken");
+        config.setMerchantSecretKey("merchantSecretToken");
         config.setMerchantToken("merchantToken");
 
         if (args.length == 2) {
             config.setMerchantToken(args[0]);
-            config.setMerchantSecretToken(args[1]);
+            config.setMerchantSecretKey(args[1]);
         }
 
-        DirectAPI directAPI = new DirectAPI();
+        KartukuDirect directAPI = new KartukuDirect();
         // set config
         directAPI.setConfig(config);
         // set time out connection in ms
@@ -145,7 +145,7 @@ public class Main {
         System.out.println();
     }
 
-    private static void purchase(DirectAPI directAPI, BufferedReader reader) {
+    private static void purchase(KartukuDirect directAPI, BufferedReader reader) {
         PurchaseRequest req = new RequestBuilder(directAPI.getConfig()).buildPurchaseRequest(reader);
         try {
             System.out.println("Request purchase with parameter : ");
@@ -153,12 +153,12 @@ public class Main {
             PurchaseResponse res = directAPI.purchase(req);
             System.out.println("Response : ");
             showParameter(res);
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void authorize(DirectAPI directAPI, BufferedReader reader) {
+    private static void authorize(KartukuDirect directAPI, BufferedReader reader) {
         AuthorizeRequest req = new RequestBuilder(directAPI.getConfig()).buildAuthorizeRequest(reader);
         try {
             System.out.println("Request authorize with parameter : ");
@@ -170,12 +170,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message, NoSignatureException must be caught first
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void capture(DirectAPI directAPI, BufferedReader reader) {
+    private static void capture(KartukuDirect directAPI, BufferedReader reader) {
         CaptureRequest req = new RequestBuilder(directAPI.getConfig()).buildCaptureRequest(reader);
         try {
             System.out.println("Request capture with parameter : ");
@@ -187,12 +187,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void voidPurchase(DirectAPI directAPI, BufferedReader reader) {
+    private static void voidPurchase(KartukuDirect directAPI, BufferedReader reader) {
         VoidPurchaseRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidPurchaseRequest(reader);
         try {
             System.out.println("Request voidPurchase with parameter : ");
@@ -204,12 +204,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void refund(DirectAPI directAPI, BufferedReader reader) {
+    private static void refund(KartukuDirect directAPI, BufferedReader reader) {
         RefundRequest req = new RequestBuilder(directAPI.getConfig()).buildRefundRequest(reader);
         try {
             System.out.println("Request refund with parameter : ");
@@ -221,12 +221,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void voidAuthorize(DirectAPI directAPI, BufferedReader reader) {
+    private static void voidAuthorize(KartukuDirect directAPI, BufferedReader reader) {
         VoidAuthorizeRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidAuthorizeRequest(reader);
         try {
             System.out.println("Request voidAuthorize with parameter : ");
@@ -238,12 +238,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void voidCapture(DirectAPI directAPI, BufferedReader reader) {
+    private static void voidCapture(KartukuDirect directAPI, BufferedReader reader) {
         VoidCaptureRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidCaptureRequest(reader);
         try {
             System.out.println("Request voidCapture with parameter : ");
@@ -255,12 +255,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void voidRefund(DirectAPI directAPI, BufferedReader reader) {
+    private static void voidRefund(KartukuDirect directAPI, BufferedReader reader) {
         VoidRefundRequest req = new RequestBuilder(directAPI.getConfig()).buildVoidRefundRequest(reader);
         try {
             System.out.println("Request voidRefund with parameter : ");
@@ -272,12 +272,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void tokenStore(DirectAPI directAPI, BufferedReader reader) {
+    private static void tokenStore(KartukuDirect directAPI, BufferedReader reader) {
         TokenStoreRequest req = new RequestBuilder(directAPI.getConfig()).buildTokenStoreRequest(reader);
         try {
             System.out.println("Request tokenStore with parameter : ");
@@ -289,12 +289,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void query(DirectAPI directAPI, BufferedReader reader) {
+    private static void query(KartukuDirect directAPI, BufferedReader reader) {
         QueryRequest req = new RequestBuilder(directAPI.getConfig()).buildQueryRequest(reader);
         try {
             System.out.println("Request query with parameter : ");
@@ -306,12 +306,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void tokenRemove(DirectAPI directAPI, BufferedReader reader) {
+    private static void tokenRemove(KartukuDirect directAPI, BufferedReader reader) {
         TokenRemoveRequest req = new RequestBuilder(directAPI.getConfig()).buildTokenRemoveRequest(reader);
         try {
             System.out.println("Request tokenRemove with parameter : ");
@@ -323,12 +323,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void tokenList(DirectAPI directAPI, BufferedReader reader) {
+    private static void tokenList(KartukuDirect directAPI, BufferedReader reader) {
         TokenListRequest req = new RequestBuilder(directAPI.getConfig()).buildTokenListRequest(reader);
         try {
             System.out.println("Request tokenList with parameter : ");
@@ -340,12 +340,12 @@ public class Main {
             // NoSignatureException is exception where the result from the IPG server without message digest
             // the message itself is an error message
             System.out.println(String.format("Result without message digest.\nMessage : %s", ex.getMessage()));
-        } catch (IpgDirectAPIException ex) {
+        } catch (KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void ottRequest(DirectAPI directAPI, BufferedReader reader) {
+    private static void ottRequest(KartukuDirect directAPI, BufferedReader reader) {
         try {
             OttRequest req = new RequestBuilder(directAPI.getConfig()).buildOttRequest(reader, "store");
             System.out.println("Request ott with parameter : ");
@@ -364,7 +364,7 @@ public class Main {
                     }
                 }
             }
-        } catch (IOException | IpgDirectAPIException ex) {
+        } catch (IOException | KartukuDirectException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
